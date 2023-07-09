@@ -1,2 +1,22 @@
-suzzy
+Forever loop:
+  If light sensor touches black:
+    Move to the right, by operating left wheels faster than right
+    This can be done with different severities or degrees. Let this be 150
+  If left sensor touches black:
+    Move to the left at 15°
+  If right sensor touches green"
+    Move to the right at 30°
+  If left sensor touches green:
+    Move to the left at 30°
+  If silver is touched:
+    Turn right 45°
+Start turning left slowly until distance sensor senses something
+Move right at 10° until distance sensor stops seeing
+While loop until we touch the can
+Pick can up
+Move forward
+If left touches white turn right at _ degrees
+If right touches white turn right at _ degrees
+If sensor touches silver, turn that direction and move until both do
+Then, resume pseudocode to go back to start
 
