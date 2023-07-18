@@ -196,22 +196,20 @@ class Motor:
             
 # Testing            
 colourA = ColourSensor(1) #Right sensor
-#colourB = ColourSensor(2) #Left sensor
-#colourC = ColourSensor(3) #Front sensor
-#distance = DistanceSensor(4) #Distance sensor
+colourB = ColourSensor(2) #Left sensor
+colourC = ColourSensor(3) #Front sensor
+distance = DistanceSensor(4) #Distance sensor
 while True: 
-    print(colourA.getHue())
-
-    if colourA.getVibrance() < 0.01:
+    if colourA.getHue() > 65 and colourA.getHue() < 75:
         # If right sensor touches black turn right 15 degrees
          pass
-    if colourB.getVibrance() < 0.01:
+    if colourB.getHue() > 65 and colourA.getHue() < 75:
         # If left sensor touches black turn left 15 degrees
          pass
-     if colourA.getHue() > 100 and colourA.getHue() < 140:
+     if colourA.getHue() > 90 and colourA.getHue() < 100:
         #Move the right at 30 degrees until right sensor touches black
          pass
-    if colourB.getHue() > 100 and colourB.getHue() < 140:
+    if colourB.getHue() > 90 and colourB.getHue() < 100:
         #Move to the left at 30 degrees until left sensor touches black
          pass
     if distance.getDistance() < 100:
@@ -223,5 +221,5 @@ while True:
         #Turn right 45 degrees
         #move left slowly
          pass
-#Black = 70, White = 79, Green = 92
+# Hue values for different colours at a distance of ≈ 2cm away: Black = 70, White = 79, Green = 92
     
