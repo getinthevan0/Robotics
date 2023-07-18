@@ -18,11 +18,11 @@ class ColourSensor:
     
     #Get the saturation of the reflected colour - useful for determining shade such as white, black
     def getSaturation(self):
-        return self.sensor.readHSV()['saturation']
+        return self.sensor.readHSV()['sat']
     
     #Get the vibrance of the reflected colour - useful for determining reflectiveness ie silver, not silver
     def getVibrance(self):
-        return self.sensor.readHSV()['vibrance']
+        return self.sensor.readHSV()['val']
     
     #Get the combined hue saturation and vibrance of the reflected colour, get with hsv['hue'], hsv['saturation'] and hsv['vibrance']
     def getHSV(self):
@@ -192,8 +192,36 @@ class Motor:
             self.forward.off()
             self.backward.on()
             self.pwm.value = -speed
+            
+            
+# Testing            
+colourA = ColourSensor(1) #Right sensor
+#colourB = ColourSensor(2) #Left sensor
+#colourC = ColourSensor(3) #Front sensor
+#distance = DistanceSensor(4) #Distance sensor
+while True: 
+    print(colourA.getHue())
 
-colourA = ColourSensor(1)
-colourB = ColourSensor(2)
-colourC = ColourSensor(3)
-colourD = ColourSensor(4)
+    if colourA.getVibrance() < 0.01:
+        # If right sensor touches black turn right 15 degrees
+         pass
+    if colourB.getVibrance() < 0.01:
+        # If left sensor touches black turn left 15 degrees
+         pass
+     if colourA.getHue() > 100 and colourA.getHue() < 140:
+        #Move the right at 30 degrees until right sensor touches black
+         pass
+    if colourB.getHue() > 100 and colourB.getHue() < 140:
+        #Move to the left at 30 degrees until left sensor touches black
+         pass
+    if distance.getDistance() < 100:
+        #Turn 90 degrees right
+        #Move at 30 degrees left for _ seconds
+        #When right sensor touches black, turn right until it is no longer touching black
+         pass
+     if colourA.getSaturation() > 2:
+        #Turn right 45 degrees
+        #move left slowly
+         pass
+#Black = 70, White = 79, Green = 92
+    
