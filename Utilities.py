@@ -192,3 +192,8 @@ class Motor:
             self.forward.off()
             self.backward.on()
             self.pwm.value = -speed
+
+colourA = ColourSensor(1)
+colourB = ColourSensor(2)
+colourC = ColourSensor(3)
+colourD = ColourSensor(4)
