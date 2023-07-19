@@ -21,7 +21,7 @@ class ColourSensor:
         return self.sensor.readHSV()['sat']
     
     #Get the vibrance of the reflected colour - useful for determining reflectiveness ie silver, not silver
-    def getVibrance(self):
+    def getValue(self):
         return self.sensor.readHSV()['val']
     
     #Get the combined hue saturation and vibrance of the reflected colour, get with hsv['hue'], hsv['saturation'] and hsv['vibrance']
@@ -223,33 +223,59 @@ motor2 = Motor(MOTOR2_FORWARD_PIN, MOTOR2_BACKWARD_PIN, MOTOR2_PWM_PIN) #front r
 motor3 = Motor(MOTOR3_FORWARD_PIN, MOTOR3_BACKWARD_PIN, MOTOR3_PWM_PIN) #back left
 motor4 = Motor(MOTOR4_FORWARD_PIN, MOTOR4_BACKWARD_PIN, MOTOR4_PWM_PIN) #back right
 
+def rescue():
+        turnRight(0.1)
+        time.sleep(0.2)
+    while True:
+        motor2.setSpeed(0.2)
+        motor4.setSpeed(0.2)
+        motor1.set(0.1)
+        motor3.setSpeed(0.1)
+        if distance.getDistance() < 100:
+            motor1.setspeed(0.2)
+            motor2.setspeed(0.2)
+            motor3.setspeed(0.2)
+            motor4.setspeed(0.2)
+            if distance.getDistance() < 50 and colourC.getValue > 0.5:
+                # Pick up can
+                while True:
+                    turnRight(0.1)
+                    if colorC.getHue > 20 and colorC.getHue < 40:
+                        motor1.setspeed(0.2)
+                        motor2.setspeed(0.2)
+                        motor3.setspeed(0.2)
+                        motor4.setspeed(0.2)
+                        if distance.getDistance() < 50:
+                            # Put can on platform
 
 def turnRight(speed):
         motor2.setSpeed(-speed);
         motor4.setSpeed(-speed);
         motor1.setSpeed(speed);
         motor3.setSpeed(speed);
+
 def turnLeft(speed):
     turnRight(-speed)
+    
 while True: 
     if colourA.getHue() > 65 and colourA.getHue() < 75:
         # If right sensor touches black turn right 15 degrees
         turnRight(0.1)
-        pass
+        
     if colourB.getHue() > 65 and colourA.getHue() < 75:
         # If left sensor touches black turn left 15 degrees
         turnLeft(0.1)   
-        pass
+        
     if colourA.getHue() > 90 and colourA.getHue() < 100:
         #Move the right at 30 degrees until right sensor touches black
         while not(colourB.getHue() > 65 and colourB.getHue() < 75):
             turnRight(0.1)
-        pass
+        
     if colourB.getHue() > 90 and colourB.getHue() < 100:
         #Move to the left at 30 degrees until left sensor touches black
         while not(colourA.getHue() > 65 and colourA.getHue() < 75):
             turnLeft(0.1)
-        pass
+        
     if distance.getDistance() < 100:
         #Turn 90 degrees right
         turnRight(0.1)
@@ -260,16 +286,8 @@ while True:
         if colourB.getHue() > 65 and colourA.getHue() < 75:
             while colourB.getHue() > 65 and colourA.getHue() < 75:
                 turnRight()
-        pass
+                
     if colourA.getSaturation() > 2:
-        #Turn right 45 degrees
-        turnRight(0.1)
-        time.sleep(0.2)
-        #move left slowly
-        motor2.setSpeed(0.2)
-        motor4.setSpeed(0.2)
-        motor1.set(0.1)
-        motor3.setSpeed(0.1)
-        pass
+        rescue()
 # Hue values for different colours at a distance of ≈ 2cm away: Black = 70, White = 79, Green = 92
     
