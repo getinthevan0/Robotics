@@ -224,21 +224,20 @@ motor3 = Motor(MOTOR3_FORWARD_PIN, MOTOR3_BACKWARD_PIN, MOTOR3_PWM_PIN) #back le
 motor4 = Motor(MOTOR4_FORWARD_PIN, MOTOR4_BACKWARD_PIN, MOTOR4_PWM_PIN) #back right
 
 def rescue():
+        # Turn 90 degrees right
         turnRight(0.1)
         time.sleep(0.2)
+        #Move slowly left until the motor detects can
     while True:
-        motor2.setSpeed(0.2)
-        motor4.setSpeed(0.2)
-        motor1.set(0.1)
-        motor3.setSpeed(0.1)
         if distance.getDistance() < 100:
-            motor1.setspeed(0.2)
-            motor2.setspeed(0.2)
-            motor3.setspeed(0.2)
-            motor4.setspeed(0.2)
+            motor1.setspeed(0.1)
+            motor2.setspeed(0.1)
+            motor3.setspeed(0.1)
+            motor4.setspeed(0.1)
             if distance.getDistance() < 50 and colourC.getValue > 0.5:
                 # Pick up can
                 while True:
+                    # Move right slowly until the front color sensor detects orange
                     turnRight(0.1)
                     if colorC.getHue > 20 and colorC.getHue < 40:
                         motor1.setspeed(0.2)
@@ -247,37 +246,53 @@ def rescue():
                         motor4.setspeed(0.2)
                         if distance.getDistance() < 50:
                             # Put can on platform
-
+        else:
+        motor2.setSpeed(0.2)
+        motor4.setSpeed(0.2)
+        motor1.set(0.1)
+        motor3.setSpeed(0.1)
+        
 def turnRight(speed):
-        motor2.setSpeed(-speed);
-        motor4.setSpeed(-speed);
-        motor1.setSpeed(speed);
-        motor3.setSpeed(speed);
+        motor2.setSpeed(0.5);
+        motor4.setSpeed(0.5);
+        motor1.setSpeed(0.5+speed);
+        motor3.setSpeed(0.5+speed);
 
-def turnLeft(speed):
-    turnRight(-speed)
+def turnLeft(speed):        
+        motor1.setSpeed(0.5);
+        motor3.setSpeed(0.5);
+        motor2.setSpeed(0.5+speed);
+        motor4.setSpeed(0.5+speed);
+
     
 while True: 
+    
+    # If right sensor touches black turn right 15 degrees
     if colourA.getHue() > 65 and colourA.getHue() < 75:
-        # If right sensor touches black turn right 15 degrees
         turnRight(0.1)
         
+    # If left sensor touches black turn left 15 degrees
     if colourB.getHue() > 65 and colourA.getHue() < 75:
-        # If left sensor touches black turn left 15 degrees
         turnLeft(0.1)   
-        
+
+    
+    #If the right sensor touches green, move the right at 30 degrees until right sensor touches black
     if colourA.getHue() > 90 and colourA.getHue() < 100:
-        #Move the right at 30 degrees until right sensor touches black
         while not(colourB.getHue() > 65 and colourB.getHue() < 75):
             turnRight(0.1)
-        
+
+    
+    #If the left sensor touches green, move to the left at 30 degrees until left sensor touches black
     if colourB.getHue() > 90 and colourB.getHue() < 100:
-        #Move to the left at 30 degrees until left sensor touches black
         while not(colourA.getHue() > 65 and colourA.getHue() < 75):
             turnLeft(0.1)
+
+    # If both sensors touch green, turn 180 degrees
+    if colourB.getHue() > 90 and colourB.getHue() < 100 and colourA.getHue() > 90 and colourA.getHue() < 100:
+        turnRight(0.2)
         
+    #If robot detects can, turn 90 degrees right
     if distance.getDistance() < 100:
-        #Turn 90 degrees right
         turnRight(0.1)
         time.sleep(0.3)
         #Move at 30 degrees left for _ seconds
@@ -286,7 +301,8 @@ while True:
         if colourB.getHue() > 65 and colourA.getHue() < 75:
             while colourB.getHue() > 65 and colourA.getHue() < 75:
                 turnRight()
-                
+
+    # If the left sensor detects silver, perform rescue operation
     if colourA.getSaturation() > 2:
         rescue()
 # Hue values for different colours at a distance of ≈ 2cm away: Black = 70, White = 79, Green = 92
