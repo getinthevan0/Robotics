@@ -225,7 +225,8 @@ motor4 = Motor(MOTOR4_FORWARD_PIN, MOTOR4_BACKWARD_PIN, MOTOR4_PWM_PIN) #back ri
 
 def rescue():
         # Turn 90 degrees right
-        turnRight(0.1)
+        motor1.setSpeed(0.5);
+        motor3.setSpeed(0.5);
         time.sleep(0.2)
         #Move slowly left until the motor detects can
     while True:
