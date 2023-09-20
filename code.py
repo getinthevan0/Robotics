@@ -60,13 +60,13 @@ def rightDetectsGreen():
         return False
     
 def leftDetectsWhite():
-    if colourB.getHue() > 68 and colourB.getHue() < 80:
+    if colourB.getVibrance() > 0.026:
         return True
     else:
         return False
     
 def rightDetectsWhite():
-    if colourA.getHue() > 75 and colourA.getHue() < 83:
+    if colourA.getVibrance() > 0.026:
         return True
     else:
         return False
@@ -97,11 +97,11 @@ def detectsObject():
     
     
 while True:
-    print(colourA.getHSV())
+    print(colourB.getHSV())
     #print(colourA.getHue(), colourB.getHue())
     if leftDetectsWhite() == True and rightDetectsWhite() == True:
-        motorA.setSpeed(0.35)
-        motorB.setSpeed(0.35)
+        motorA.setSpeed(0.4)
+        motorB.setSpeed(0.4)
         
     if leftDetectsGreen() == True and rightDetectsGreen() == True:
         motorA.setSpeed(0.5)
@@ -117,10 +117,13 @@ while True:
         print('greenright')
 
     if leftDetectsBlack() == True:
+        turnLeft(0.4)
+        
+    elif leftOnBlack() == True:
         turnLeft(0.7)
         
     if rightDetectsBlack() == True:
+        turnRight(0.4)
+        
+    elif rightOnBlack == True:
         turnRight(0.7)
-    
-
-
