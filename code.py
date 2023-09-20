@@ -1,115 +1,126 @@
-from utilities import *
-# Testing            
-colourA = ColourSensor(1) #Right sensor
-colourB = ColourSensor(2) #Left sensor
-colourC = ColourSensor(3) #Front sensor
-distance = DistanceSensor(4) #Distance sensor
+from utilites import *
+#Testing            
+colourB = ColourSensor(1)
+colourA = ColourSensor(2) #Left sensor
+Distance = DistanceSensor(4) #Distance Sensor
+#distance = Distanctime.sleep(0.5)eSensor(4) #Distance sensor
+motorB = Motor(25,8, 7) #Pass in the GPIO ports - See wiring diagram
+motorA = Motor(10,9, 11)
+#motorD = Motor(14,15, 18)
+#motorC = Motor(13,19, 26)
 
-# Define the GPIO pins for each motor (replace these with the actual GPIO pins you are using)
-MOTOR1_FORWARD_PIN = 17
-MOTOR1_BACKWARD_PIN = 18
-MOTOR1_PWM_PIN = 22
 
-MOTOR2_FORWARD_PIN = 23
-MOTOR2_BACKWARD_PIN = 24
-MOTOR2_PWM_PIN = 25
+def turnLeft(speed):
+    motorA.setSpeed(speed)
+    motorB.setSpeed(-speed)
 
-MOTOR3_FORWARD_PIN = 5
-MOTOR3_BACKWARD_PIN = 6
-MOTOR3_PWM_PIN = 13
-
-MOTOR4_FORWARD_PIN = 19
-MOTOR4_BACKWARD_PIN = 26
-MOTOR4_PWM_PIN = 12
-
-# Initialize the four motors
-motor1 = Motor(MOTOR1_FORWARD_PIN, MOTOR1_BACKWARD_PIN, MOTOR1_PWM_PIN) #front left
-motor2 = Motor(MOTOR2_FORWARD_PIN, MOTOR2_BACKWARD_PIN, MOTOR2_PWM_PIN) #front right
-motor3 = Motor(MOTOR3_FORWARD_PIN, MOTOR3_BACKWARD_PIN, MOTOR3_PWM_PIN) #back left
-motor4 = Motor(MOTOR4_FORWARD_PIN, MOTOR4_BACKWARD_PIN, MOTOR4_PWM_PIN) #back right
-
-def rescue():
-        # Turn 90 degrees right
-        motor1.setSpeed(0.5);
-        motor3.setSpeed(0.5);
-        time.sleep(0.2)
-        #Move slowly left until the motor detects can
-    while True:
-        if distance.getDistance() < 100:
-            motor1.setspeed(0.1)
-            motor2.setspeed(0.1)
-            motor3.setspeed(0.1)
-            motor4.setspeed(0.1)
-            if distance.getDistance() < 50 and colourC.getValue > 0.5:
-                # Pick up can
-                while True:
-                    # Move right slowly until the front color sensor detects orange
-                    turnRight(0.1)
-                    if colorC.getHue > 20 and colorC.getHue < 40:
-                        motor1.setspeed(0.2)
-                        motor2.setspeed(0.2)
-                        motor3.setspeed(0.2)
-                        motor4.setspeed(0.2)
-                        if distance.getDistance() < 50:
-                            # Put can on platform
-        else:
-        motor2.setSpeed(0.2)
-        motor4.setSpeed(0.2)
-        motor1.set(0.1)
-        motor3.setSpeed(0.1)
-        
+    #motorC.setSpeed(0.2+speed)
+    #motorD.setSpeed(0.2)
+    
 def turnRight(speed):
-        motor2.setSpeed(0.5);
-        motor4.setSpeed(0.5);
-        motor1.setSpeed(0.5+speed);
-        motor3.setSpeed(0.5+speed);
+    motorA.setSpeed(-speed)
+    motorB.setSpeed(speed)
 
-def turnLeft(speed):        
-        motor1.setSpeed(0.5);
-        motor3.setSpeed(0.5);
-        motor2.setSpeed(0.5+speed);
-        motor4.setSpeed(0.5+speed);
+    #motorC.setSpeed(0.2)
+    #motorD.setSpeed(0.2+speed)
+    
+def leftDetectsBlack():
+    if colourB.getVibrance() < 0.025:
+        return True
+    else:
+        return False
+    
+def leftOnBlack():
+    if colourB.getVibrance() < 0.018:
+        return True
+    else:
+        return False
 
-    
-while True: 
-    
-    # If right sensor touches black turn right 15 degrees
-    if colourA.getHue() > 65 and colourA.getHue() < 75:
-        turnRight(0.1)
-        
-    # If left sensor touches black turn left 15 degrees
-    if colourB.getHue() > 65 and colourA.getHue() < 75:
-        turnLeft(0.1)   
+def rightOnBlack():
+    if colourA.getVibrance() < 0.018:
+        return True
+    else:
+        return False
+def rightDetectsBlack():
+    if colourA.getVibrance() < 0.025:
+        return True
+    else:
+        return False
 
-    
-    #If the right sensor touches green, move the right at 30 degrees until right sensor touches black
-    if colourA.getHue() > 90 and colourA.getHue() < 100:
-        while not(colourB.getHue() > 65 and colourB.getHue() < 75):
-            turnRight(0.1)
-
-    
-    #If the left sensor touches green, move to the left at 30 degrees until left sensor touches black
+def leftDetectsGreen():
     if colourB.getHue() > 90 and colourB.getHue() < 100:
-        while not(colourA.getHue() > 65 and colourA.getHue() < 75):
-            turnLeft(0.1)
+        return True
+    else:
+        return False
 
-    # If both sensors touch green, turn 180 degrees
-    if colourB.getHue() > 90 and colourB.getHue() < 100 and colourA.getHue() > 90 and colourA.getHue() < 100:
-        turnRight(0.2)
-        
-    #If robot detects can, turn 90 degrees right
-    if distance.getDistance() < 100:
-        turnRight(0.1)
-        time.sleep(0.3)
-        #Move at 30 degrees left for _ seconds
-        turnLeft(0.1)
-        #When right sensor touches black, turn right until it is no longer touching black
-        if colourB.getHue() > 65 and colourA.getHue() < 75:
-            while colourB.getHue() > 65 and colourA.getHue() < 75:
-                turnRight()
-
-    # If the left sensor detects silver, perform rescue operation
-    if colourA.getSaturation() > 2:
-        rescue()
-# Hue values for different colours at a distance of ≈ 2cm away: Black = 70, White = 79, Green = 92
+def rightDetectsGreen():
+    if colourA.getHue() > 90 and colourA.getHue() < 100:
+        return True
+    else:
+        return False
     
+def leftDetectsWhite():
+    if colourB.getHue() > 68 and colourB.getHue() < 80:
+        return True
+    else:
+        return False
+    
+def rightDetectsWhite():
+    if colourA.getHue() > 75 and colourA.getHue() < 83:
+        return True
+    else:
+        return False
+    
+def greenLeft(amountLeft):
+    while leftOnBlack() == False:
+        motorA.setSpeed(0.1)
+        motorB.setSpeed(0.1) 
+    while leftDetectsGreen() == False:
+        motorB.setSpeed(-0.7)
+    while leftDetectsGreen() == True:
+        motorA.setSpeed(0.3)
+        motorB.setSpeed(0.3)
+    
+def greenRight(amountRight):
+    while rightOnBlack() == False:
+        motorA.setSpeed(0.2)
+        motorB.setSpeed(0.2) 
+    while rightDetectsGreen() == False:
+        motorA.setSpeed(-0.7)
+    while rightDetectsGreen() == True:
+        motorA.setSpeed(0.3)
+        motorB.setSpeed(0.3)
+
+def detectsObject():
+    if Distance.getDistance() < 50:
+        pass
+    
+    
+while True:
+    print(colourA.getHSV())
+    #print(colourA.getHue(), colourB.getHue())
+    if leftDetectsWhite() == True and rightDetectsWhite() == True:
+        motorA.setSpeed(0.35)
+        motorB.setSpeed(0.35)
+        
+    if leftDetectsGreen() == True and rightDetectsGreen() == True:
+        motorA.setSpeed(0.5)
+        motorB.setSpeed(-0.5)
+        time.sleep(1)
+
+    if leftDetectsGreen() == True:
+        greenLeft(0.5)
+        print('greenleft')
+    
+    if rightDetectsGreen() == True:
+        greenRight(0.5)
+        print('greenright')
+
+    if leftDetectsBlack() == True:
+        turnLeft(0.7)
+        
+    if rightDetectsBlack() == True:
+        turnRight(0.7)
+    
+
+
