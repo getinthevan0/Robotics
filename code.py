@@ -117,13 +117,13 @@ while True:
         print('greenright')
 
     if leftDetectsBlack() == True:
-        turnLeft(0.4)
-        
+        motorA.setSpeed(0.5)
+        motorB.setSpeed(0.3)
     elif leftOnBlack() == True:
         turnLeft(0.7)
         
     if rightDetectsBlack() == True:
-        turnRight(0.4)
-        
+        motorB.setSpeed(0.5)
+        motorA.setSpeed(0.3)
     elif rightOnBlack == True:
         turnRight(0.7)
