@@ -8,41 +8,45 @@ motorB = Motor(25,8, 7) #Pass in the GPIO ports - See wiring diagram
 motorA = Motor(10,9, 11)
 #motorD = Motor(14,15, 18)
 #motorC = Motor(13,19, 26)
-
-
+whiteA = 0.7
+blackA = 0.2 
+whiteB = 0.7
+blackB = 0.2
+greenA = 92
+greenB = 89
 def turnLeft(speed):
     motorA.setSpeed(speed)
-    motorB.setSpeed(-speed)
+    
 
     #motorC.setSpeed(0.2+speed)
     #motorD.setSpeed(0.2)
     
 def turnRight(speed):
-    motorA.setSpeed(-speed)
+    
     motorB.setSpeed(speed)
 
     #motorC.setSpeed(0.2)
     #motorD.setSpeed(0.2+speed)
     
 def leftDetectsBlack():
-    if colourB.getVibrance() < 0.025:
+    if colourB.getVibrance() < whiteB-0.1:
         return True
     else:
         return False
     
 def leftOnBlack():
-    if colourB.getVibrance() < 0.018:
+    if colourB.getVibrance() < blackB+0.2:
         return True
     else:
         return False
 
 def rightOnBlack():
-    if colourA.getVibrance() < 0.018:
+    if colourA.getVibrance() < whiteB-0.1:
         return True
     else:
         return False
 def rightDetectsBlack():
-    if colourA.getVibrance() < 0.025:
+    if colourA.getVibrance() < blackB+0.2:
         return True
     else:
         return False
@@ -60,13 +64,13 @@ def rightDetectsGreen():
         return False
     
 def leftDetectsWhite():
-    if colourB.getVibrance() > 0.026:
+    if colourB.getVibrance() > 0.05:
         return True
     else:
-        return False
+            return False
     
 def rightDetectsWhite():
-    if colourA.getVibrance() > 0.026:
+    if colourA.getVibrance() > 0.05:
         return True
     else:
         return False
@@ -97,9 +101,11 @@ def detectsObject():
     
     
 while True:
-    print(colourB.getHSV())
+    motorA.setSpeed((0.1+whiteA-colourA.getVibrance()))
+    motorB.setSpeed((0.1+whiteB-colourB.getVibrance()))
+    print(str(colourA.getVibrance()) + " " + str(colourB.getVibrance()))
     #print(colourA.getHue(), colourB.getHue())
-    if leftDetectsWhite() == True and rightDetectsWhite() == True:
+    '''if leftDetectsWhite() == True and rightDetectsWhite() == True:
         motorA.setSpeed(0.4)
         motorB.setSpeed(0.4)
         
@@ -126,4 +132,4 @@ while True:
         motorB.setSpeed(0.5)
         motorA.setSpeed(0.3)
     elif rightOnBlack == True:
-        turnRight(0.7)
+        turnRight(0.7)'''
